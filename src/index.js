@@ -3,7 +3,8 @@ const bodyParser = require('body-parser')
 const FileSync = require('lowdb/adapters/FileSync')
 const low = require('lowdb')
 
-const port = 3000
+require('dotenv').config()
+
 const app = express()
 
 const adapter = new FileSync('db.json')
@@ -152,4 +153,6 @@ function authorize(user, password) {
     }
 }
 
-app.listen(port, () => console.info(`Koreader server listening on port ${port}!`))
+app.listen(process.env.SERVER_PORT, process.env.SERVER_HOST, () => {
+    console.info(`Koreader server listening on port ${process.env.SERVER_PORT}!`)
+})
