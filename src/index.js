@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const FileSync = require('lowdb/adapters/FileSync')
 const low = require('lowdb')
+const https = require('https')
+const fs = require('fs')
 
 require('dotenv').config()
 
@@ -46,18 +48,18 @@ app.post('/users/create', (req, res) => {
 app.get('/users/auth', (req, res) => {
     const user = authorize(
         req.headers["x-auth-user"], req.headers["x-auth-key"])
-    user 
-        ? res.status(200).send({authorized: "OK"}) 
+    user
+        ? res.status(200).send({authorized: "OK"})
         : res.status(401).send({message: "Unauthorized"})
 })
 
 app.put('/syncs/progress', (req, res) => {
-    
+
     const username = authorize(
         req.headers["x-auth-user"], req.headers["x-auth-key"])
 
     if (username) {
-        
+
         const timestamp = +new Date()
         const {
             percentage,
@@ -66,7 +68,7 @@ app.put('/syncs/progress', (req, res) => {
             device_id,
             document
         } = req.body
-    
+
         if (document) {
             if (percentage && progress && device) {
                 const recordExists = db.get('documents')
@@ -76,7 +78,7 @@ app.put('/syncs/progress', (req, res) => {
                 if (recordExists.length) {
                     db.get('documents')
                         .find({ key: username + document })
-                        .assign({ 
+                        .assign({
                             key: username + document,
                             percentage,
                             progress,
@@ -88,7 +90,7 @@ app.put('/syncs/progress', (req, res) => {
 
                 } else {
                     db.get('documents')
-                        .push({ 
+                        .push({
                             key: username + document,
                             percentage,
                             progress,
@@ -110,11 +112,11 @@ app.put('/syncs/progress', (req, res) => {
 
 app.get('/syncs/progress/:document', (req, res) => {
 
-    
+
     const username = authorize(
         req.headers["x-auth-user"], req.headers["x-auth-key"])
     const document = req.params.document
-        
+
     if (username) {
 
         if (document) {
@@ -131,7 +133,7 @@ app.get('/syncs/progress/:document', (req, res) => {
         } else {
             res.status(403).send({message: "Field 'document' not provided."})
         }
-        
+
     } else {
         res.status(401).send({message: "Unauthorized"})
     }
@@ -153,6 +155,10 @@ function authorize(user, password) {
     }
 }
 
-app.listen(process.env.SERVER_PORT, process.env.SERVER_HOST, () => {
+https.createServer({
+    key: fs.readFileSync('certificates/server.key'),
+    cert: fs.readFileSync('certificates/server.cert')
+  }, app)
+  .listen(process.env.SERVER_PORT, process.env.SERVER_HOST, () => {
     console.info(`Koreader server listening on port ${process.env.SERVER_PORT}!`)
 })

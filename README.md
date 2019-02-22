@@ -2,7 +2,7 @@
 Self hostable synchronization service for koreader devices for node.js
 
 
-## Instalation 
+## Instalation
 
 ```
 git clone https://github.com/dobladov/koreader-node-sync-server.git
@@ -19,6 +19,13 @@ SERVER_HOST=0.0.0.0
 SERVER_PORT=3000
 ```
 
+Create the certificates
+
+```
+mkdir certificates
+openssl req -nodes -new -x509 -keyout certificates/server.key -out certificates/server.cert
+```
+
 Run the server
 
 ```
@@ -28,13 +35,7 @@ npm start
 Check that is running
 
 ```
- curl  http://localhost:3000/healthcheck
+curl -k https://localhost:3000/healthcheck
 ```
 
-
-Set your Koreader url to [http://localhost:3000](http://localhost:3000)
-
-
-## To DO
-
-- [ ] Add https support 
+Set your Koreader url to [https://localhost:3000](https://localhost:3000)
