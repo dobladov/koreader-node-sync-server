@@ -1,18 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const FileSync = require('lowdb/adapters/FileSync')
-const low = require('lowdb')
 const https = require('https')
 const fs = require('fs')
+const db = require("./db")
 
 require('dotenv').config()
 
 const app = express()
-
-const adapter = new FileSync('db.json')
-const db = low(adapter)
-db.defaults({ documents: [], users: []})
-  .write()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
