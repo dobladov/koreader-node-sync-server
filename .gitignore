@@ -3,3 +3,4 @@ db.json
 node_modules/
 certificates/
 npm-debug.log
+.DS_Store
