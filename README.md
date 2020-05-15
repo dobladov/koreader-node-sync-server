@@ -10,7 +10,7 @@ cd koreader-node-sync-server
 npm install
 ```
 
-## Configuration
+## Optional Configuration
 
 Create a `.env` file in the root directory with this content
 
@@ -26,13 +26,14 @@ mkdir certificates
 openssl req -nodes -new -x509 -keyout certificates/server.key -out certificates/server.cert
 ```
 
-Run the server
+## Run the server
 
 ```
 npm start
 ```
+By default the server will run on http://localhost:3000
 
-Check that is running
+## Check that is running
 
 ```
 curl -k https://localhost:3000/healthcheck
