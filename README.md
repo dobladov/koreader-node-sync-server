@@ -1,7 +1,6 @@
 # Koreader node sync server
 Self hostable synchronization service for koreader devices for node.js
 
-
 ## Instalation
 
 ```
@@ -17,9 +16,10 @@ Create a `.env` file in the root directory with this content
 ```
 SERVER_HOST=0.0.0.0
 SERVER_PORT=3000
+CERTIFICATES_FOLDER = './certificates'
 ```
 
-Create the certificates
+Create the certificates for https
 
 ```
 mkdir certificates
@@ -31,12 +31,11 @@ openssl req -nodes -new -x509 -keyout certificates/server.key -out certificates/
 ```
 npm start
 ```
-By default the server will run on http://localhost:3000
 
-## Check that is running
+## Check if is running
 
 ```
-curl -k https://localhost:3000/healthcheck
+curl -k http://localhost:3000/healthcheck
 ```
 
-Set your Koreader url to [https://localhost:3000](https://localhost:3000)
+Set your Koreader url to [http://localhost:3000](http://localhost:3000)

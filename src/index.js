@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const http = require('http')
 const https = require('https')
 const fs = require('fs')
 const db = require('./db')
@@ -10,7 +11,8 @@ const app = express()
 
 const {
   SERVER_HOST = 'localhost',
-  SERVER_PORT = 3000
+  SERVER_PORT = 3000,
+  CERTIFICATES_FOLDER
 } = process.env
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -168,10 +170,13 @@ const authorize = (user, password) => {
   }
 }
 
-https.createServer({
-  key: fs.readFileSync('certificates/server.key'),
-  cert: fs.readFileSync('certificates/server.cert')
-}, app)
-  .listen(+SERVER_PORT, SERVER_HOST, () => {
-    console.info(`Koreader server listening on https://${SERVER_HOST}:${SERVER_PORT}`)
-  })
+const server = CERTIFICATES_FOLDER
+  ? https.createServer({
+    key: fs.readFileSync('certificates/server.key'),
+    cert: fs.readFileSync('certificates/server.cert')
+  }, app)
+  : http.createServer({}, app)
+
+server.listen(+SERVER_PORT, SERVER_HOST, () => {
+  console.info(`Koreader server listening on http${CERTIFICATES_FOLDER ? 's' : ''}://${SERVER_HOST}:${SERVER_PORT}`)
+})
