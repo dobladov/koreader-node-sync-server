@@ -7,11 +7,12 @@ on:
 
 jobs:
   test:
+    name: Linter
     runs-on: ubuntu-latest
-    linter:
+    steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-        - run: npm ci
-        - run: npm t
+      - run: npm ci
+      - run: npm t
