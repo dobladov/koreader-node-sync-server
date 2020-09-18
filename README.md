@@ -1,3 +1,5 @@
+![Test](https://github.com/dobladov/koreader-node-sync-server/workflows/Test/badge.svg)
+
 # Koreader node sync server
 Self hostable synchronization service for koreader devices for node.js
 
